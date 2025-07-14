@@ -2,7 +2,7 @@
 #include <list>
 using namespace std;
 
-struct Aresta
+struct Aresta 
 {
     int origem, destino, peso;
 };
