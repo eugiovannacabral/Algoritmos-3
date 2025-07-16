@@ -1,0 +1,84 @@
+#include <iostream>
+#include<list>
+using namespace std;
+
+struct Node 
+{
+	int info;
+	Node * right;           //ponteiro para os filhos
+	Node * left;
+} ;
+
+
+void insert(Node *& curr, int info)                                          //é um ponteiro por referência, ou seja, permite alterar o ponteiro original 
+                                                                                //que está na função chamadora (como root).
+{	
+	if(curr == NULL)                                                            //cria um novo nó caso a posição esteja vazia
+	{
+		curr = new Node;
+		curr->info = info;                                                    //inseri os dados da torta
+		curr->right = NULL;                                                     //cria seus filhos da esquerda e direita vazios
+		curr->left = NULL;
+	}else {                                                                     //caso a raiz já esteja ocupada
+		if(info >= curr->info)                                          // comparar o pf da nova torta com o pf do nó atual para decidir para que lado seguir
+		{
+			insert(curr->right, info);                                         //da direita caso o valor seja maior ou igual 
+		} else if(info < curr->info){
+			insert(curr->left, info);                                          //da esuqerda os menores
+		}		
+	}	
+}
+
+void levels(Node * curr)
+{                                                                           
+    if(curr == NULL)                                                            // Se a árvore estiver vazia, não faz nada
+        return;
+        
+    list<Node*> fila_visitacao;                                                 // Cria uma fila para armazenar os nós a serem visitados
+    fila_visitacao.push_back(curr);                                             // Insere o nó raiz na fila (primeiro nó a ser visitado)
+    
+    while(!fila_visitacao.empty())                                              // Enquanto ainda houver nós na fila
+    {
+        Node * visitado = fila_visitacao.front();                               // Pega o primeiro nó da fila (nó atual a ser visitado)
+        
+        cout << visitado->info << " " ;     // Exibe os dados do nó (neste caso: código e preço final da torta)
+        
+        if(visitado->left != NULL)                                              // Se o nó tiver filho à esquerda, adiciona o filho esquerdo na fila
+            fila_visitacao.push_back(visitado->left);
+        
+        if(visitado->right != NULL)                                             // Se o nó tiver filho à direita, adiciona o filho direito na fila
+            fila_visitacao.push_back(visitado->right);
+        
+        fila_visitacao.pop_front();                                             // Remove o nó visitado da fila (pois já foi processado)
+    }
+}
+
+void destruct(Node *& curr){                                                    //Liberar toda a memória alocada dinamicamente pelos nós da árvore, evitando vazamentos de memória.
+
+	if(curr->left != NULL)                                                      //Destroi todos os filhos da esquerda
+		destruct(curr->left);
+	if(curr->right != NULL)                                                     //Destroi todos os da direita
+	   	destruct(curr->right);
+	delete curr;                                                                //Destroi o atual
+	curr = NULL;                                                                //Garante que foi destruido
+	return;
+}
+
+// ----------------------------------------------------------------------------
+int main()
+{
+    int n;
+    Node * root = NULL;
+    
+    cin >> n;                
+    while(n != -1)
+    {
+        insert(root, n);
+        cin >> n;
+    }
+    
+    levels(root);
+    destruct(root);
+    
+    return 0;
+}
