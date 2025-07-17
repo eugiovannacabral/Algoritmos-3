@@ -1,0 +1,52 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+struct ponto
+{
+    int x, y;
+};
+
+int main()
+{
+    float dist;
+    int n;
+    double menor_dist = 1000;       //inicializamos ele com esse valor alto para garantir que a primeira distância calculada será menor do que esse valor e, assim, o primeiro ponto sempre será armazenado como o "melhor_ponto".
+    ponto u;                       //coordenadas do usuario
+    ponto p;                       //var que recebe as coordenadas, facilitando em momento de comparação no codigo
+    ponto coord[50];               //coordenadas dos pontos de interesse
+    ponto melhor_coord;            //as coordenadas do ponto que está mais perto do usuario
+    
+    cin >> n;
+    for(int i = 0; i < n; i++)
+    {
+        cin >> coord[i].x;
+        cin >> coord[i].y;
+    }
+    
+    cin >> u.x;
+    cin >> u.y;
+    
+    for(int i = 0; i < n; i++)
+    {
+        p = coord[i];
+        dist = sqrt(((u.x - p.x) * (u.x - p.x)) + ((u.y - p.y) * (u.y - p.y)));
+        
+        if(dist < menor_dist)
+        {
+            menor_dist = dist;
+            melhor_coord = p;
+            
+        }else if(dist == menor_dist)
+        {
+            if(p.x < melhor_coord.x || (p.x == melhor_coord.x && p.y < melhor_coord.y))
+            {
+                melhor_coord = p;
+            }
+        }
+    }
+    
+    cout << melhor_coord.x << " " << melhor_coord.y << endl;
+    
+    return 0;
+}
