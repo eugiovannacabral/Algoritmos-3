@@ -1,0 +1,70 @@
+#include<iostream>
+using namespace std;
+
+struct ponto {
+    float x, y;
+};
+
+int main() {
+    ponto a, b;  // linha 1
+    ponto c, d;  // linha 2
+
+    cin >> a.x >> a.y;
+    cin >> b.x >> b.y;
+    cin >> c.x >> c.y;
+    cin >> d.x >> d.y;
+
+    float m1, m2;
+    ponto p; // ponto de interseção
+
+                                                    // Caso: as duas verticais
+    if (b.x == a.x && d.x == c.x) {
+        cout << "NAO" << endl;
+        return 0;
+    }
+                                             // Caso: reta 1 vertical
+    if (b.x == a.x) 
+    {
+        float m2 = (d.y - c.y) / (d.x - c.x);
+        p.x = a.x;
+        p.y = m2 * (p.x - c.x) + c.y;             //essa equa de reta só que isolando o y
+                                               //(y-yo) = m(x -xo) / y = mx + b
+    }else if (d.x == c.x)                     // Caso: reta 2 vertical
+    {
+        float m1 = (b.y - a.y) / (b.x - a.x);
+        p.x = c.x;
+        p.y = m1 * (p.x - a.x) + a.y;
+    }
+                                            // Nenhuma é vertical
+    else {
+        m1 = (b.y - a.y) / (b.x - a.x);
+        m2 = (d.y - c.y) / (d.x - c.x);
+
+        if (m1 == m2)                       //aqui está dizendo que elas são paralelas
+        {
+            cout << "NAO" << endl;
+            return 0;
+        }
+
+        p.x = ((m1 * a.x - a.y) - (m2 * c.x - c.y)) / (m1 - m2); 
+        p.y = m1 * (p.x - a.x) + a.y;
+    }
+
+                                            // Verifica se x e y estão dentro do segmento 1
+    bool dentro1 = 
+        ((p.x >= a.x && p.x <= b.x) || (p.x >= b.x && p.x <= a.x)) &&
+        ((p.y >= a.y && p.y <= b.y) || (p.y >= b.y && p.y <= a.y));
+
+                                         // Verifica se x e y estão dentro do segmento 2
+    bool dentro2 = 
+        ((p.x >= c.x && p.x <= d.x) || (p.x >= d.x && p.x <= c.x)) &&
+        ((p.y >= c.y && p.y <= d.y) || (p.y >= d.y && p.y <= c.y));
+
+    if (dentro1 && dentro2) {
+        cout << "SIM" << endl;
+    }else {
+        cout << "NAO" << endl;
+    }
+
+    return 0;
+}
